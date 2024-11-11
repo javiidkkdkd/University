@@ -1,0 +1,21 @@
+#javier fuentes
+#utilizando conocimientos de algebra y calculo, calcular el tiempo de impacto del primer torpedo usando x= x0 + v0 *t
+distancia_milla_nautica = 1
+Velocidad_de_desplazamiento_horizontal_del_objetivo_en_nudos = 40
+Velocidad_corriente_marina_en_nudos = 40
+velocidad_del_torpedo_en_nudos = 50
+
+#conversion distancia metros
+distancia_metros = distancia_milla_nautica * 1.852 
+
+#vemos cual es la velocidad total
+vel_total = Velocidad_de_desplazamiento_horizontal_del_objetivo_en_nudos + Velocidad_corriente_marina_en_nudos
+
+#conversion a m/s
+vel_total_mps = vel_total * 1.944
+vel_torp_mps = velocidad_del_torpedo_en_nudos * 1.944
+
+#tiempo del impacto = (t = d/v)
+tie_imp = distancia_metros / (vel_torp_mps - vel_total_mps)
+
+print("el tiempo del impacto del primer torpedo es:", tie_imp, "segundos")
