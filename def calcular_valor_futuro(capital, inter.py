@@ -1,28 +1,63 @@
-#Javier Fuentes
-#VF = VA * (1 + i) ** n
-#VA = VF/(1 + i) ** n
+#Antonella Bravo y Javier Fuentes
+#funcion para leer los datos en el archivo de texto
+def lectura_datos():
+    archivo = open('en_palabras.txt', 'r', encoding='ASCII') #abre el archivo en modo lectura
+    lineas = archivo.readlines()
+    archivo.close() 
+    return [linea.strip() for linea in lineas] #devuelve una lista con las lineas sin espacios
 
-#Imprime los valores futuros por cada año
-def calcular_valor_futuro(capital, interes, years):
-    print("VALOR FUTURO")
-    for n in range(years + 1):  #desde año 0 hasta years
-        vf = capital * (1 + interes) ** n  #fórmula del valor futuro
-        print(f"Año {n}: {vf}")
-    return vf
+#diccionario para las palabras requeridas
+numeros = {"zero": 0, "one": 1 , "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16, "eighteen": 18, "nineteen": 19, "twenty": 20, "thirty": 30, "fourty": 40, "fifty": 50, "sixty": 60, "seventy": 70, "eighty": 80, "ninety": 90}
+#diccionario para los multiplicadores
+multiplos = {"million": 1000000, "thousand": 1000, "hundred": 100} 
 
-#Imprime los valores actuales por cada año
-def calcular_valor_actual(capital_futuro, interes, years):
-    print("\nVALOR ACTUAL")
-    for n in range(years + 1):  #desde año 0 hasta 'anios'
-        va = capital_futuro / (1 + interes) ** n  #fórmula del valor actual
-        print(f"Año {n}: {va}")
-    return va
+#convertir palabras a numeros
+def pal_num(letras):
+    letras = letras.replace(',', '')
+    letras = letras.replace('-', ' ')
+    
+    letras = letras.lower()  #pasa de mayusculas a minusculas
+    letras = letras.split()  #separa las palabras
+    
+    total = 0 
+    conteo = 0 
+    negative = False
+    
+    for letra in letras:
+        if letra == "negative":
+            negative = True 
+        elif letra in numeros:
+            conteo += numeros[letra] 
+        elif letra in multiplos:
+            
+            if conteo == 0:
+                conteo = 1  
+            
+            conteo *= multiplos[letra]
+        if letra == "thousand" or letra == "million":  #si encuentra estas palabras, se lo suma al total y reinicia el conteo
+            total += conteo
+            conteo = 0
+    
+    total += conteo
+    
+    if negative:
+        total = -total 
+        
+    return total
 
-#salida
+#creacion del archivo
+def archivo_salida(lineas):
+    archivo2 = open('en_numeros.txt', 'w', encoding='ASCII') #crea el un archivo .txt
+    archivo2.write("Antonella Bravo - Javier Fuentes\n") #integrantes
+    archivo2.write("\n") #espacio en blanco
+    for linea in lineas:
+        if linea == "": 
+            archivo2.write("\n")  
+        else:
+            numero = pal_num(linea) #separa las lineas
+            archivo2.write(f"{numero}\n") #escribe el numero de la suma 
+    archivo2.close()
+
 if __name__ == "__main__":
-    capital_inicial = float(input("Ingrese el capital inicial (en unidades monetarias): "))    #pide al usuario el capital inicial
-    tasa_interes = float(input("Ingrese la tasa de interés anual (sin '%'): ")) / 100 #pide al usuario la tasa de interés como porcentaje y la convierte a decimal
-    years = int(input("Ingrese el número de años: "))   #pide al usuario el número de años
-    #llamada de las funciones
-    calcular_valor_futuro(capital_inicial, tasa_interes, years)
-    calcular_valor_actual(capital_inicial, tasa_interes, years)
+    lineas = lectura_datos()
+    archivo_salida(lineas)
